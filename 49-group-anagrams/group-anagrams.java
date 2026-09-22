@@ -8,7 +8,10 @@ class Solution {
             String key = new String(s);
             
 
-            map.putIfAbsent(key, new ArrayList<>());
+            if(!map.containsKey(key)){
+                map.put(key, new ArrayList<>());
+            }
+
             map.get(key).add(strs[i]);
         }
         List<List<String>> result=new ArrayList<>();
