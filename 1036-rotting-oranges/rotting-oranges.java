@@ -1,59 +1,73 @@
 class Solution {
-    public class node{
-        int timeframe;
-        int x;
-        int y;
-        node(int timeframe, int x, int y){
-            this.timeframe=timeframe;
-            this.x=x;
-            this.y=y;
-        }
-    }
     public int orangesRotting(int[][] grid) {
-        Queue<node> queue=new LinkedList<>();
-        int time=0;
-        for(int i=0;i<grid.length;i++){
-            for(int j=0;j<grid[0].length;j++){
-                if(grid[i][j]==2){
-                    queue.offer(new node(time,i,j));
+
+        int rows = grid.length;
+        int cols = grid[0].length;
+
+        Queue<int[]> queue = new LinkedList<>();
+
+        int fresh = 0;
+
+        // Put all rotten oranges in queue
+        // Count fresh oranges
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+
+                if (grid[i][j] == 2) {
+                    queue.offer(new int[]{i, j});
+                }
+
+                if (grid[i][j] == 1) {
+                    fresh++;
                 }
             }
         }
 
-        while(!queue.isEmpty()){
-            node a=queue.poll();
-            time=Math.max(time,a.timeframe);
-            int r=a.x;
-            int s=a.y;
-            if(r >= 0 && r < grid.length && s >= 0 && s+1 < grid[0].length){
-                if((grid[r][s+1] ==1)){
-                    grid[r][s+1]=2;
-                    queue.offer(new node(a.timeframe+1,r,s+1));
+        int time = 0;
+
+        int[][] directions = {
+            {-1, 0},   // up
+            {1, 0},    // down
+            {0, -1},   // left
+            {0, 1}     // right
+        };
+
+        while (!queue.isEmpty() && fresh > 0) {
+
+            int size = queue.size();
+
+            // Process all oranges at current time
+            for (int i = 0; i < size; i++) {
+
+                int[] current = queue.poll();
+
+                int r = current[0];
+                int c = current[1];
+
+                // Check 4 directions
+                for (int[] dir : directions) {
+
+                    int nr = r + dir[0];
+                    int nc = c + dir[1];
+
+                    if (nr >= 0 && nr < rows &&
+                        nc >= 0 && nc < cols &&
+                        grid[nr][nc] == 1) {
+
+                        grid[nr][nc] = 2;
+
+                        fresh--;
+
+                        queue.offer(new int[]{nr, nc});
+                    }
                 }
             }
-            if(r >= 0 && r+1 < grid.length && s >= 0 && s < grid[0].length){
-                if(grid[r+1][s]==1){
-                    grid[r+1][s]=2;
-                    queue.offer(new node(a.timeframe+1,r+1,s));
-                }
-            }
-            if(r >= 0 && r < grid.length && s-1 >= 0 && s < grid[0].length){
-                if((grid[r][s-1] ==1)){
-                    grid[r][s-1]=2;
-                    queue.offer(new node(a.timeframe+1,r,s-1));
-                }
-            }
-            if(r-1 >= 0 && r < grid.length && s >= 0 && s < grid[0].length){
-                if(grid[r-1][s]==1){
-                    grid[r-1][s]=2;
-                    queue.offer(new node(a.timeframe+1,r-1,s));
-                }
-            }
+
+            time++;
         }
-        for (int[] row : grid) {
-            for (int val : row) {
-                if (val == 1) return -1;
-            }
+
+        if (fresh > 0) {
+            return -1;
         }
 
         return time;
