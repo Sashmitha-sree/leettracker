@@ -10,10 +10,10 @@ class Solution {
 
         for (int i = 0; i < s.length(); i++) {
 
-            // Odd length palindrome
+           
             int len1 = expand(s, i, i);
 
-            // Even length palindrome
+            
             int len2 = expand(s, i, i + 1);
 
             int len = Math.max(len1, len2);
