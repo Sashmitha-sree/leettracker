@@ -5,7 +5,7 @@ class Solution {
             map.put(nums[i],map.getOrDefault(nums[i],0)+1);
         }
         int max=nums[0];
-        for(int val:nums){
+        for(int val:map.keySet()){
             if(map.get(max)<map.get(val)){
                 max=val;
             }
