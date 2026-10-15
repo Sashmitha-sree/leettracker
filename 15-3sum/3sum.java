@@ -21,7 +21,7 @@ class Solution {
                     while(left<right && nums[right]==nums[right-1]){
                         right--;
                     }
-                    left--;
+                    left++;
                     right--;
                 }
 
